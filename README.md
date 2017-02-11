@@ -1,6 +1,6 @@
 # flango!
 
-Do you like the niceties Flask, but have to use Django for some reason? Are you a lunatic?
+Do you like the niceties of Flask, but have to use Django for some reason? Are you a lunatic?
 
 If you answered yes twice, this library is for you!
 
@@ -67,6 +67,8 @@ urlpatterns = app.urlpatterns
  
     @app.route('/map/<float:lat>/<float:long>')
     def map(lat, long):
+       assert isinstance(lat, float)
+       assert isinstance(long, float)
        return render_template('map.html', lat=lat, long=long)
     ```
 
