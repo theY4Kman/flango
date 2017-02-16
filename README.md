@@ -106,7 +106,7 @@ urlpatterns = app.urlpatterns
 
 # Using `flango.request` with regular Django views
 
-Flango wraps your view functions in order to provide the `request` object elsewhere. This means that when a your code which accesses `flango.request` is called from a regular Django view, it will fail.
+Flango wraps your view functions to provide the `request` object globally. When your form or other code which accesses `flango.request` is called from a regular Django view, it will fail.
 
 To fix this, add Flango's `global_request_middleware` to your `settings.MIDDLEWARE`:
 ```python
@@ -117,4 +117,4 @@ MIDDLEWARE = (
 )
 ```
 
-For best results, place it first in the list. This will allow you to use `flango.request` even in other middlewares.
+For best results, place it at the top of the list. This allows you to use `flango.request` in other middlewares.
