@@ -1,7 +1,6 @@
 import pytest
 
-from flango import Flango
-from flango import url_for
+from flango import Flango, url_for
 
 
 @pytest.mark.parametrize('pattern,uri', [
