@@ -2,7 +2,9 @@
 
 Do you like the niceties of Flask, but have to use Django for some reason? Are you a lunatic?
 
-If you answered yes twice, this library is for you!
+If you answered yes twice, this library is for you! 
+
+Supports Python 2.6 to 3.7, and Django 1.8+
 
 
 # Quickstart

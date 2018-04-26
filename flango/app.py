@@ -1,10 +1,11 @@
 import functools
 
+import six
 from django.conf.urls import url
 from django.http.response import HttpResponse
 from werkzeug.routing import Map, Rule
 
-from flango.request import _push_request, _pop_request
+from flango._request import request_stack
 
 
 class Flango(object):
@@ -68,16 +69,16 @@ class Flango(object):
         """
         @functools.wraps(view)
         def wrapped_view(request, **kwargs):
-            _push_request(request)
+            request_stack.push(request)
 
-            for name, converter in rule._converters.iteritems():
+            for name, converter in six.iteritems(rule._converters):
                 if name in kwargs:
                     kwargs[name] = converter.to_python(kwargs[name])
 
             try:
                 rv = view(**kwargs)
             finally:
-                _pop_request()
+                request_stack.pop()
 
             return self.make_response(rv)
 
@@ -118,13 +119,13 @@ class Flango(object):
             headers, status_or_headers = status_or_headers, None
 
         if not isinstance(rv, self.response_class):
-            if isinstance(rv, (str, unicode)):
+            if isinstance(rv, six.text_type):
                 rv = self.response_class(rv, status=status_or_headers)
             else:
                 raise ValueError('Content must be a string')
 
         if status_or_headers is not None:
-            if isinstance(status_or_headers, (str, unicode)):
+            if isinstance(status_or_headers, six.text_type):
                 # FIXME: I'm pretty sure Django's reason_phrase is *just* the
                 #        'OK' in '200 OK', whereas Flask allows passing '200 OK'
                 rv.reason_phrase = status_or_headers
@@ -135,7 +136,7 @@ class Flango(object):
             # HttpResponse doesn't take a headers kwarg, so we must set each
             # header manually with rv[header] = value
             if isinstance(headers, dict):
-                headers_iter = headers.iteritems()
+                headers_iter = six.iteritems(headers)
             elif isinstance(headers, list):
                 headers_iter = headers
             else:

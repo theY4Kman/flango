@@ -1,13 +1,13 @@
-from flango.request import _push_request, _pop_request
+from flango._request import request_stack
 
 
 def global_request_middleware(get_response):
     """Save request object to thread local"""
 
     def middleware(request):
-        _push_request(request)
+        request_stack.push(request)
         response = get_response(request)
-        _pop_request()
+        request_stack.pop()
         return response
 
     return middleware

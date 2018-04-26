@@ -1,2 +1,3 @@
-Django
-Werkzeug
+six==1.11.0
+Django>1.8
+Werkzeug>=0.6.1
